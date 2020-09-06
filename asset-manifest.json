@@ -1,23 +1,33 @@
 {
   "files": {
     "main.css": "/agilefreaks_challenge/static/css/main.5f7226be.chunk.css",
-    "main.js": "/agilefreaks_challenge/static/js/main.6d9672fa.chunk.js",
-    "main.js.map": "/agilefreaks_challenge/static/js/main.6d9672fa.chunk.js.map",
-    "runtime-main.js": "/agilefreaks_challenge/static/js/runtime-main.31bd4e8a.js",
-    "runtime-main.js.map": "/agilefreaks_challenge/static/js/runtime-main.31bd4e8a.js.map",
-    "static/js/2.d4024daf.chunk.js": "/agilefreaks_challenge/static/js/2.d4024daf.chunk.js",
-    "static/js/2.d4024daf.chunk.js.map": "/agilefreaks_challenge/static/js/2.d4024daf.chunk.js.map",
+    "main.js": "/agilefreaks_challenge/static/js/main.923dccd6.chunk.js",
+    "main.js.map": "/agilefreaks_challenge/static/js/main.923dccd6.chunk.js.map",
+    "runtime-main.js": "/agilefreaks_challenge/static/js/runtime-main.cc90301f.js",
+    "runtime-main.js.map": "/agilefreaks_challenge/static/js/runtime-main.cc90301f.js.map",
+    "xlsx.js": "/agilefreaks_challenge/static/js/xlsx.a989d46d.chunk.js",
+    "xlsx.js.map": "/agilefreaks_challenge/static/js/xlsx.a989d46d.chunk.js.map",
+    "static/js/3.3dafda45.chunk.js": "/agilefreaks_challenge/static/js/3.3dafda45.chunk.js",
+    "static/js/3.3dafda45.chunk.js.map": "/agilefreaks_challenge/static/js/3.3dafda45.chunk.js.map",
+    "static/js/4.ed84511b.chunk.js": "/agilefreaks_challenge/static/js/4.ed84511b.chunk.js",
+    "static/js/4.ed84511b.chunk.js.map": "/agilefreaks_challenge/static/js/4.ed84511b.chunk.js.map",
+    "static/js/5.b3bfa66a.chunk.js": "/agilefreaks_challenge/static/js/5.b3bfa66a.chunk.js",
+    "static/js/5.b3bfa66a.chunk.js.map": "/agilefreaks_challenge/static/js/5.b3bfa66a.chunk.js.map",
+    "static/js/6.da584b9a.chunk.js": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js",
+    "static/js/6.da584b9a.chunk.js.map": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js.map",
     "index.html": "/agilefreaks_challenge/index.html",
-    "precache-manifest.754fe73643c3cba745698e6df2367437.js": "/agilefreaks_challenge/precache-manifest.754fe73643c3cba745698e6df2367437.js",
+    "precache-manifest.4dc0fdde40183a1002dc04ab40282595.js": "/agilefreaks_challenge/precache-manifest.4dc0fdde40183a1002dc04ab40282595.js",
     "service-worker.js": "/agilefreaks_challenge/service-worker.js",
     "static/css/main.5f7226be.chunk.css.map": "/agilefreaks_challenge/static/css/main.5f7226be.chunk.css.map",
-    "static/js/2.d4024daf.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/2.d4024daf.chunk.js.LICENSE.txt",
+    "static/js/4.ed84511b.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/4.ed84511b.chunk.js.LICENSE.txt",
+    "static/js/5.b3bfa66a.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/5.b3bfa66a.chunk.js.LICENSE.txt",
+    "static/js/6.da584b9a.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js.LICENSE.txt",
     "static/media/spinner.svg": "/agilefreaks_challenge/static/media/spinner.1170a918.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.31bd4e8a.js",
-    "static/js/2.d4024daf.chunk.js",
+    "static/js/runtime-main.cc90301f.js",
+    "static/js/4.ed84511b.chunk.js",
     "static/css/main.5f7226be.chunk.css",
-    "static/js/main.6d9672fa.chunk.js"
+    "static/js/main.923dccd6.chunk.js"
   ]
 }
