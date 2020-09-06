@@ -175,11 +175,6 @@ function App() {
                         <img src={logo} className="logo" alt="logo" />
                     </header>
                     <div className="mainContainer">
-                        <div className="userCoordinatesWrapper">
-                            <code>Latitude: {userCoordinates.latitude}</code>
-                            <br />
-                            <code>Longitude: {userCoordinates.longitude}</code>
-                        </div>
                         {processedApiData.length > 0 && (
                             <div>
                                 <BubbleChart
