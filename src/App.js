@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
+import BubbleChart from '@weknow/react-bubble-chart-d3'
+import Switch from 'react-switch'
 import axios from 'axios'
 import logo from './logo.png'
 import spinner from './spinner.svg'
@@ -11,8 +13,8 @@ import './App.css'
 am4core.useTheme(am4themes_dark)
 
 const apiUrl = 'https://blue-bottle-api-test.herokuapp.com/v1'
-const coffeeShopsShown = 10
-const coffeeShopNameDelimiter = false // 'Blue Bottle '
+const coffeeShopsShown = 3
+const coffeeShopNameDelimiter = 'Blue Bottle '
 
 function App() {
     const [isLoading, setIsLoading] = useState(true)
@@ -20,6 +22,7 @@ function App() {
     const [apiData, setApiData] = useState([])
     const [processedApiData, setProcessedApiData] = useState([])
     const [userCoordinates, setUserCoordinates] = useState({})
+    const [isV1, setIsV1] = useState(true)
 
     const getToken = async () => {
         try {
@@ -128,7 +131,7 @@ function App() {
                 apiData.forEach((coffeeShop, index) => {
                     index < coffeeShopsShown &&
                         graphCoffeeShopsData.push({
-                            title: coffeeShopNameDelimiter
+                            label: coffeeShopNameDelimiter
                                 ? coffeeShop.name
                                       .split(coffeeShopNameDelimiter)
                                       .pop()
@@ -140,13 +143,15 @@ function App() {
                                 coffeeShop.x,
                                 coffeeShop.y
                             )} km`,
+                            value: 1,
                         })
                 })
                 graphCoffeeShopsData.push({
-                    title: 'User',
+                    label: 'User',
                     latitude: userCoordinates.latitude,
                     longitude: userCoordinates.longitude,
                     color: 'red',
+                    value: 1,
                 })
             }
             setProcessedApiData(graphCoffeeShopsData)
@@ -206,15 +211,15 @@ function App() {
         let imageSeries = chart.series.push(new am4maps.MapImageSeries())
         imageSeries.mapImages.template.propertyFields.longitude = 'longitude'
         imageSeries.mapImages.template.propertyFields.latitude = 'latitude'
-        imageSeries.mapImages.template.tooltipText = `[bold]{title}[/]
+        imageSeries.mapImages.template.tooltipText = `[bold]{label}[/]
         {customTooltip}`
 
         let circle = imageSeries.mapImages.template.createChild(am4core.Circle)
-        circle.radius = 5
+        circle.radius = 0.3
         circle.propertyFields.fill = 'color'
 
         let circle2 = imageSeries.mapImages.template.createChild(am4core.Circle)
-        circle2.radius = 5
+        circle2.radius = 0.3
         circle2.propertyFields.fill = 'color'
 
         circle2.events.on('inited', function (event) {
@@ -228,6 +233,10 @@ function App() {
         }
     }, [animateBullet, processedApiData])
 
+    const handleVersionChange = (checked) => {
+        setIsV1(!checked)
+    }
+
     return (
         <div className="app">
             {isLoading ? (
@@ -237,16 +246,47 @@ function App() {
             ) : (
                 <div>
                     <header className="header">
-                        <div>Coffee Shop Finder</div>
                         <img src={logo} className="logo" alt="logo" />
+                        <div>
+                            <span>Coffee Shop Finder Map </span>
+                            <Switch
+                                onChange={handleVersionChange}
+                                checked={!isV1}
+                            />
+                        </div>
                     </header>
                     <div className="mainContainer">
+                        {processedApiData.length > 0 && (
+                            <div
+                                style={{
+                                    display: isV1 ? 'block' : 'none',
+                                }}
+                            >
+                                <BubbleChart
+                                    width={700}
+                                    height={700}
+                                    padding={400}
+                                    showLegend={false}
+                                    showValue={false}
+                                    showAnimations={false}
+                                    labelFont={{
+                                        family: 'Arial',
+                                        size: 16,
+                                        color: '#fff',
+                                        weight: 'bold',
+                                    }}
+                                    data={processedApiData}
+                                    overflow={true}
+                                ></BubbleChart>
+                            </div>
+                        )}
                         <div
                             id="chartdiv"
                             style={{
                                 width: '100%',
-                                height: '500px',
-                                marginTop: '20px',
+                                height: '700px',
+                                marginTop: '50px',
+                                display: !isV1 ? 'block' : 'none',
                             }}
                         ></div>
                     </div>
