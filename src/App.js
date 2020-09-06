@@ -1,9 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import BubbleChart from '@weknow/react-bubble-chart-d3'
+import Switch from 'react-switch'
 import axios from 'axios'
 import logo from './logo.png'
 import spinner from './spinner.svg'
+import * as am4core from '@amcharts/amcharts4/core'
+import * as am4maps from '@amcharts/amcharts4/maps'
+import am4themes_dark from '@amcharts/amcharts4/themes/dark'
+import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow'
 import './App.css'
+
+am4core.useTheme(am4themes_dark)
 
 const apiUrl = 'https://blue-bottle-api-test.herokuapp.com/v1'
 const coffeeShopsShown = 3
@@ -15,6 +22,7 @@ function App() {
     const [apiData, setApiData] = useState([])
     const [processedApiData, setProcessedApiData] = useState([])
     const [userCoordinates, setUserCoordinates] = useState({})
+    const [isV1, setIsV1] = useState(true)
 
     const getToken = async () => {
         try {
@@ -128,19 +136,22 @@ function App() {
                                       .split(coffeeShopNameDelimiter)
                                       .pop()
                                 : coffeeShop.name,
-                            value: 1,
-                            color: '#03dac6',
+                            latitude: parseFloat(coffeeShop.x),
+                            longitude: parseFloat(coffeeShop.y),
+                            color: '#009ED9',
                             customTooltip: `${distanceByCoordinates(
                                 coffeeShop.x,
                                 coffeeShop.y
                             )} km`,
+                            value: 1,
                         })
                 })
                 graphCoffeeShopsData.push({
                     label: 'User',
+                    latitude: userCoordinates.latitude,
+                    longitude: userCoordinates.longitude,
+                    color: 'red',
                     value: 1,
-                    customTooltip: false,
-                    color: '#3700b3',
                 })
             }
             setProcessedApiData(graphCoffeeShopsData)
@@ -162,6 +173,70 @@ function App() {
             setIsLoading(false)
         }
     }, [apiData, apiToken, userCoordinates.latitude, userCoordinates.longitude])
+
+    const animateBullet = useCallback((circle) => {
+        let animation = circle.animate(
+            [
+                { property: 'scale', from: 1, to: 5 },
+                { property: 'opacity', from: 1, to: 0 },
+            ],
+            1000,
+            am4core.ease.circleOut
+        )
+        animation.events.on('animationended', function (event) {
+            animateBullet(event.target.object)
+        })
+    }, [])
+
+    useLayoutEffect(() => {
+        let chart = am4core.create('chartdiv', am4maps.MapChart)
+
+        chart.geodata = am4geodata_worldLow
+        chart.projection = new am4maps.projections.Miller()
+        chart.seriesContainer.draggable = false
+        chart.seriesContainer.resizable = false
+        chart.maxZoomLevel = 1
+
+        let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries())
+        polygonSeries.exclude = ['AQ']
+        polygonSeries.useGeodata = true
+
+        let polygonTemplate = polygonSeries.mapPolygons.template
+        polygonTemplate.tooltip = false
+        polygonTemplate.interactionsEnabled = false
+
+        let hs = polygonTemplate.states.create('hover')
+        hs.properties.fill = chart.colors.getIndex(0)
+
+        let imageSeries = chart.series.push(new am4maps.MapImageSeries())
+        imageSeries.mapImages.template.propertyFields.longitude = 'longitude'
+        imageSeries.mapImages.template.propertyFields.latitude = 'latitude'
+        imageSeries.mapImages.template.tooltipText = `[bold]{label}[/]
+        {customTooltip}`
+
+        let circle = imageSeries.mapImages.template.createChild(am4core.Circle)
+        circle.radius = 0.3
+        circle.propertyFields.fill = 'color'
+
+        let circle2 = imageSeries.mapImages.template.createChild(am4core.Circle)
+        circle2.radius = 0.3
+        circle2.propertyFields.fill = 'color'
+
+        circle2.events.on('inited', function (event) {
+            animateBullet(event.target)
+        })
+
+        imageSeries.data = processedApiData
+        console.log(processedApiData)
+        return () => {
+            chart.dispose()
+        }
+    }, [animateBullet, processedApiData])
+
+    const handleVersionChange = (checked) => {
+        setIsV1(!checked)
+    }
+
     return (
         <div className="app">
             {isLoading ? (
@@ -171,12 +246,22 @@ function App() {
             ) : (
                 <div>
                     <header className="header">
-                        <div>Coffee Shop Finder</div>
                         <img src={logo} className="logo" alt="logo" />
+                        <div>
+                            <span>Coffee Shop Finder Map </span>
+                            <Switch
+                                onChange={handleVersionChange}
+                                checked={!isV1}
+                            />
+                        </div>
                     </header>
                     <div className="mainContainer">
                         {processedApiData.length > 0 && (
-                            <div>
+                            <div
+                                style={{
+                                    display: isV1 ? 'block' : 'none',
+                                }}
+                            >
                                 <BubbleChart
                                     width={700}
                                     height={700}
@@ -195,6 +280,15 @@ function App() {
                                 ></BubbleChart>
                             </div>
                         )}
+                        <div
+                            id="chartdiv"
+                            style={{
+                                width: '100%',
+                                height: '700px',
+                                marginTop: '50px',
+                                display: !isV1 ? 'block' : 'none',
+                            }}
+                        ></div>
                     </div>
                 </div>
             )}
