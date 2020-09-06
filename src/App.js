@@ -36,19 +36,6 @@ function App() {
         }
     }
 
-    useEffect(() => {
-        const getUserCoordinates = () => {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setUserCoordinates({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                })
-            })
-        }
-        getToken()
-        getUserCoordinates()
-    }, [])
-
     const distanceByCoordinates = useCallback(
         (latitude, longitude) => {
             if (userCoordinates.latitude) {
@@ -73,6 +60,37 @@ function App() {
         [userCoordinates.latitude, userCoordinates.longitude]
     )
 
+    const animateBullet = useCallback((circle) => {
+        let animation = circle.animate(
+            [
+                { property: 'scale', from: 1, to: 5 },
+                { property: 'opacity', from: 1, to: 0 },
+            ],
+            1000,
+            am4core.ease.circleOut
+        )
+        animation.events.on('animationended', function (event) {
+            animateBullet(event.target.object)
+        })
+    }, [])
+
+    const handleVersionChange = (checked) => {
+        setIsV1(!checked)
+    }
+
+    useEffect(() => {
+        const getUserCoordinates = () => {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setUserCoordinates({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            })
+        }
+        getToken()
+        getUserCoordinates()
+    }, [])
+
     useEffect(() => {
         const getApiData = async () => {
             if (apiToken) {
@@ -84,16 +102,17 @@ function App() {
                             Accept: 'application/json',
                         },
                     })
-                    switch (response.status) {
-                        case 200:
-                            response.data.forEach((coffeeShop) => {
-                                coffeeShop.distance = distanceByCoordinates(
-                                    coffeeShop.x,
-                                    coffeeShop.y
-                                )
-                            })
-                            setApiData(response.data)
-                            break
+
+                    response.data.forEach((coffeeShop) => {
+                        coffeeShop.distance = distanceByCoordinates(
+                            coffeeShop.x,
+                            coffeeShop.y
+                        )
+                    })
+                    setApiData(response.data)
+                } catch (error) {
+                    const errorStatus = error.response.data.status
+                    switch (errorStatus) {
                         case 401:
                             console.log('401: Token invalid. Retrying.')
                             getToken()
@@ -111,11 +130,9 @@ function App() {
                         default:
                             console.log(
                                 'Unprocessed HTTP status code: ',
-                                response.status
+                                errorStatus
                             )
                     }
-                } catch (error) {
-                    console.error(error)
                 }
             }
         }
@@ -174,20 +191,6 @@ function App() {
         }
     }, [apiData, apiToken, userCoordinates.latitude, userCoordinates.longitude])
 
-    const animateBullet = useCallback((circle) => {
-        let animation = circle.animate(
-            [
-                { property: 'scale', from: 1, to: 5 },
-                { property: 'opacity', from: 1, to: 0 },
-            ],
-            1000,
-            am4core.ease.circleOut
-        )
-        animation.events.on('animationended', function (event) {
-            animateBullet(event.target.object)
-        })
-    }, [])
-
     useLayoutEffect(() => {
         let chart = am4core.create('chartdiv', am4maps.MapChart)
 
@@ -211,8 +214,7 @@ function App() {
         let imageSeries = chart.series.push(new am4maps.MapImageSeries())
         imageSeries.mapImages.template.propertyFields.longitude = 'longitude'
         imageSeries.mapImages.template.propertyFields.latitude = 'latitude'
-        imageSeries.mapImages.template.tooltipText = `[bold]{label}[/]
-        {customTooltip}`
+        imageSeries.mapImages.template.tooltipText = `[bold]{label}[/]\n{customTooltip}`
 
         let circle = imageSeries.mapImages.template.createChild(am4core.Circle)
         circle.radius = 0.3
@@ -227,15 +229,10 @@ function App() {
         })
 
         imageSeries.data = processedApiData
-        console.log(processedApiData)
         return () => {
             chart.dispose()
         }
     }, [animateBullet, processedApiData])
-
-    const handleVersionChange = (checked) => {
-        setIsV1(!checked)
-    }
 
     return (
         <div className="app">
@@ -283,9 +280,6 @@ function App() {
                         <div
                             id="chartdiv"
                             style={{
-                                width: '100%',
-                                height: '700px',
-                                marginTop: '50px',
                                 display: !isV1 ? 'block' : 'none',
                             }}
                         ></div>
