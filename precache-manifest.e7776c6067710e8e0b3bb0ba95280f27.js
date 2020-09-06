@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "922e91217b0de227b7c2555d4d35e372",
+    "revision": "291a69cc295047cd844c9bbc226791f6",
     "url": "/agilefreaks_challenge/index.html"
   },
   {
-    "revision": "834531804c1d48866270",
-    "url": "/agilefreaks_challenge/static/css/main.5f7226be.chunk.css"
+    "revision": "05a7e3f92921df7afa4f",
+    "url": "/agilefreaks_challenge/static/css/main.0c82bab5.chunk.css"
   },
   {
     "revision": "56638591d6eb550e0de8",
@@ -36,8 +36,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "834531804c1d48866270",
-    "url": "/agilefreaks_challenge/static/js/main.923dccd6.chunk.js"
+    "revision": "05a7e3f92921df7afa4f",
+    "url": "/agilefreaks_challenge/static/js/main.207e3746.chunk.js"
   },
   {
     "revision": "aee5ac12185bf3ef8365",

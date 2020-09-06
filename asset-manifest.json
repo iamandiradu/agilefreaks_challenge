@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/agilefreaks_challenge/static/css/main.5f7226be.chunk.css",
-    "main.js": "/agilefreaks_challenge/static/js/main.923dccd6.chunk.js",
-    "main.js.map": "/agilefreaks_challenge/static/js/main.923dccd6.chunk.js.map",
+    "main.css": "/agilefreaks_challenge/static/css/main.0c82bab5.chunk.css",
+    "main.js": "/agilefreaks_challenge/static/js/main.207e3746.chunk.js",
+    "main.js.map": "/agilefreaks_challenge/static/js/main.207e3746.chunk.js.map",
     "runtime-main.js": "/agilefreaks_challenge/static/js/runtime-main.cc90301f.js",
     "runtime-main.js.map": "/agilefreaks_challenge/static/js/runtime-main.cc90301f.js.map",
     "xlsx.js": "/agilefreaks_challenge/static/js/xlsx.a989d46d.chunk.js",
@@ -16,9 +16,9 @@
     "static/js/6.da584b9a.chunk.js": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js",
     "static/js/6.da584b9a.chunk.js.map": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js.map",
     "index.html": "/agilefreaks_challenge/index.html",
-    "precache-manifest.4dc0fdde40183a1002dc04ab40282595.js": "/agilefreaks_challenge/precache-manifest.4dc0fdde40183a1002dc04ab40282595.js",
+    "precache-manifest.e7776c6067710e8e0b3bb0ba95280f27.js": "/agilefreaks_challenge/precache-manifest.e7776c6067710e8e0b3bb0ba95280f27.js",
     "service-worker.js": "/agilefreaks_challenge/service-worker.js",
-    "static/css/main.5f7226be.chunk.css.map": "/agilefreaks_challenge/static/css/main.5f7226be.chunk.css.map",
+    "static/css/main.0c82bab5.chunk.css.map": "/agilefreaks_challenge/static/css/main.0c82bab5.chunk.css.map",
     "static/js/4.ed84511b.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/4.ed84511b.chunk.js.LICENSE.txt",
     "static/js/5.b3bfa66a.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/5.b3bfa66a.chunk.js.LICENSE.txt",
     "static/js/6.da584b9a.chunk.js.LICENSE.txt": "/agilefreaks_challenge/static/js/6.da584b9a.chunk.js.LICENSE.txt",
@@ -27,7 +27,7 @@
   "entrypoints": [
     "static/js/runtime-main.cc90301f.js",
     "static/js/4.ed84511b.chunk.js",
-    "static/css/main.5f7226be.chunk.css",
-    "static/js/main.923dccd6.chunk.js"
+    "static/css/main.0c82bab5.chunk.css",
+    "static/js/main.207e3746.chunk.js"
   ]
 }
