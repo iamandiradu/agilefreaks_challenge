@@ -41,7 +41,16 @@ body,
 
 @media (prefers-reduced-motion: no-preference) {
     .spinner {
-        animation: App-logo-spin infinite 2s linear;
+        animation: spinner-action infinite 2s linear;
+    }
+}
+
+@keyframes spinner-action {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
 
