@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import BubbleChart from '@weknow/react-bubble-chart-d3'
 import axios from 'axios'
 import logo from './logo.png'
 import spinner from './spinner.svg'
 import './App.css'
+
 const apiUrl = 'https://blue-bottle-api-test.herokuapp.com/v1'
+const coffeeShopsShown = 3
+const coffeeShopNameDelimiter = 'Blue Bottle '
 
 function App() {
     const [isLoading, setIsLoading] = useState(true)
     const [apiToken, setApiToken] = useState('')
     const [apiData, setApiData] = useState([])
+    const [processedApiData, setProcessedApiData] = useState([])
     const [userCoordinates, setUserCoordinates] = useState({})
 
     const getToken = async () => {
@@ -35,6 +40,31 @@ function App() {
         getToken()
         getUserCoordinates()
     }, [])
+
+    const distanceByCoordinates = useCallback(
+        (latitude, longitude) => {
+            if (userCoordinates.latitude) {
+                var p = 0.017453292519943295 // Math.PI / 180
+                var c = Math.cos
+                var a =
+                    0.5 -
+                    c((latitude - userCoordinates.latitude) * p) / 2 +
+                    (c(userCoordinates.latitude * p) *
+                        c(latitude * p) *
+                        (1 - c((longitude - userCoordinates.longitude) * p))) /
+                        2
+                return (
+                    Math.round(
+                        (12742 * Math.asin(Math.sqrt(a)) + Number.EPSILON) * 100
+                    ) / 100
+                ) // 2 * R; R = 6371 km
+            } else {
+                return false
+            }
+        },
+        [userCoordinates.latitude, userCoordinates.longitude]
+    )
+
     useEffect(() => {
         const getApiData = async () => {
             if (apiToken) {
@@ -83,6 +113,45 @@ function App() {
         }
         getApiData()
     }, [apiToken, distanceByCoordinates])
+
+    useEffect(() => {
+        if (apiData && userCoordinates.latitude && userCoordinates.longitude) {
+            let graphCoffeeShopsData = []
+
+            if (apiData.length > 0) {
+                apiData.sort((a, b) => (a.distance > b.distance ? 1 : -1))
+                apiData.forEach((coffeeShop, index) => {
+                    index < coffeeShopsShown &&
+                        graphCoffeeShopsData.push({
+                            label: coffeeShopNameDelimiter
+                                ? coffeeShop.name
+                                      .split(coffeeShopNameDelimiter)
+                                      .pop()
+                                : coffeeShop.name,
+                            value: 1,
+                            color: '#03dac6',
+                            customTooltip: `${distanceByCoordinates(
+                                coffeeShop.x,
+                                coffeeShop.y
+                            )} km`,
+                        })
+                })
+                graphCoffeeShopsData.push({
+                    label: 'User',
+                    value: 1,
+                    customTooltip: false,
+                    color: '#3700b3',
+                })
+            }
+            setProcessedApiData(graphCoffeeShopsData)
+        }
+    }, [
+        apiData,
+        distanceByCoordinates,
+        userCoordinates.latitude,
+        userCoordinates.longitude,
+    ])
+
     useEffect(() => {
         if (
             apiToken &&
@@ -111,6 +180,26 @@ function App() {
                             <br />
                             <code>Longitude: {userCoordinates.longitude}</code>
                         </div>
+                        {processedApiData.length > 0 && (
+                            <div>
+                                <BubbleChart
+                                    width={700}
+                                    height={700}
+                                    padding={400}
+                                    showLegend={false}
+                                    showValue={false}
+                                    showAnimations={false}
+                                    labelFont={{
+                                        family: 'Arial',
+                                        size: 16,
+                                        color: '#fff',
+                                        weight: 'bold',
+                                    }}
+                                    data={processedApiData}
+                                    overflow={true}
+                                ></BubbleChart>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

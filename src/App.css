@@ -45,8 +45,11 @@ body,
     }
 }
 
-}
-
+.tooltip {
+    background-color: rgba(40, 138, 243, 0.85);
+    padding: 2px 10px;
+    color: white;
+    border-radius: 5px;
 }
 
 .bubbleMarker {
